@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Приглашение на Хэллоуин</title>
+<link href="https://fonts.googleapis.com/css2?family=Underdog&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg1:#1b1033;--bg2:#2e1a47;--ink:#f6ead8;--muted:#cdb9e6;--orange:#ff9a3c;--glow:#ffc46b;--card:rgba(255,255,255,.07);--line:rgba(255,196,107,.35);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,var(--bg2),var(--bg1) 70%);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;overflow-x:hidden;position:relative}
+.star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;opacity:.6;animation:tw 3s infinite ease-in-out}
+@keyframes tw{50%{opacity:.1}}
+.moon{position:absolute;top:60px;right:22px;width:64px;height:64px;border-radius:50%;background:#ffe9b8;box-shadow:0 0 40px 10px rgba(255,220,150,.35)}
+.moon::after{content:"";position:absolute;left:14px;top:10px;width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,.08);box-shadow:20px 22px 0 -3px rgba(0,0,0,.07)}
+.web{position:absolute;top:0;width:130px;height:130px;fill:none;stroke:rgba(255,255,255,.45);stroke-width:1.2;animation:sway 5s infinite ease-in-out;transform-origin:top left}
+.web.l{left:0}.web.r{right:0;transform:scaleX(-1);animation-name:swayr}
+@keyframes sway{50%{transform:rotate(3deg)}}
+@keyframes swayr{0%,100%{transform:scaleX(-1) rotate(0)}50%{transform:scaleX(-1) rotate(3deg)}}
+.spider{position:absolute;left:34px;top:60px;width:38px;overflow:visible;z-index:4;pointer-events:none;animation:drop 4.5s infinite ease-in-out}
+@keyframes drop{50%{transform:translateY(30px)}}
+.bat{position:fixed;left:var(--x);bottom:-70px;width:44px;fill:#0c0618;filter:drop-shadow(0 0 2px rgba(255,255,255,.25));animation:fly 5.5s linear var(--d) 1 forwards;z-index:5;pointer-events:none}
+.bat path{transform-origin:center;animation:flap .25s infinite alternate ease-in-out}
+@keyframes flap{to{transform:scaleY(.55)}}
+@keyframes fly{0%{transform:translate(0,0) rotate(45deg) scale(var(--s))}100%{transform:translate(var(--dist),calc(var(--dist) * -1)) rotate(45deg) scale(var(--s))}}
+.bat.idle{position:absolute;bottom:auto;transform:rotate(30deg);animation:idle 6s ease-in-out infinite alternate;opacity:.9}
+@keyframes idle{from{transform:rotate(30deg)}to{transform:translate(-22px,14px) rotate(18deg)}}
+main{position:relative;z-index:2;max-width:480px;margin:0 auto;padding:110px 20px 150px;text-align:center}
+.kicker{color:var(--glow);letter-spacing:.2em;text-transform:uppercase;font-size:.8rem}
+h1{font-family:'Underdog','Georgia',serif;font-weight:400;font-size:2.5rem;line-height:1.1;margin:10px 0 8px;color:var(--orange);text-shadow:0 0 22px rgba(255,154,60,.45)}
+.sub{color:var(--muted);margin:0 0 24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin:12px 0;text-align:left;backdrop-filter:blur(4px)}
+.card b{color:var(--glow)}
+.when{display:flex;gap:12px;justify-content:center;text-align:center}
+.when div{flex:1}
+.when span{display:block;font-size:1.35rem;font-weight:700;color:var(--ink)}
+.when small{color:var(--muted)}
+.rsvp{margin-top:26px}
+.rsvp h2{font-family:'Underdog','Georgia',serif;font-weight:400;font-size:1.5rem;margin:0 0 12px}
+input{width:100%;padding:13px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.3);color:var(--ink);font:inherit;margin-bottom:14px}
+.btns{position:relative;display:flex;gap:12px;justify-content:center;min-height:54px}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 20px;cursor:pointer}
+#yes{background:var(--orange);color:#2a1300;box-shadow:0 0 20px rgba(255,154,60,.5)}
+#no{background:#3a2a55;color:var(--ink);transition:transform .15s ease-out;touch-action:none}
+#no.run{position:fixed;z-index:20}
+#hint{min-height:1.4em;color:var(--muted);font-size:.9rem;margin-top:10px}
+#done{display:none;margin-top:10px;font-size:1.1rem}
+#fallback{display:none;margin-top:12px}
+#fallback button{background:#3a2a55;color:var(--ink)}
+.pumpkins{position:fixed;left:0;right:0;bottom:0;height:120px;pointer-events:none;z-index:3;display:flex;justify-content:space-between;align-items:flex-end;padding:0 14px env(safe-area-inset-bottom,0px)}
+.pk{width:92px;filter:drop-shadow(0 0 14px rgba(255,154,60,.6));animation:fl 2.8s infinite ease-in-out}
+.pk:last-child{width:70px;animation-delay:1s}
+@keyframes fl{50%{filter:drop-shadow(0 0 24px rgba(255,190,90,.95))}}
+</style>
+</head>
+<body>
+<div id="stars"></div>
+<div class="moon"></div>
+<svg class="web l" viewBox="0 0 130 130"><path d="M0 0L120 0M0 0L100 70M0 0L60 110M0 0L0 125M20 0Q22 22 0 22M45 0Q48 48 0 46M75 0Q80 78 0 72M105 0Q112 105 0 98"/></svg>
+<svg class="web r" viewBox="0 0 130 130"><path d="M0 0L120 0M0 0L100 70M0 0L60 110M0 0L0 125M20 0Q22 22 0 22M45 0Q48 48 0 46M75 0Q80 78 0 72M105 0Q112 105 0 98"/></svg>
+
+<svg class="spider" viewBox="0 0 40 40"><line x1="20" y1="-400" x2="20" y2="14" stroke="rgba(255,255,255,.5)" stroke-width="1"/><g fill="#1a0e30" stroke="rgba(255,255,255,.45)" stroke-width="1.2"><circle cx="20" cy="26" r="8"/><circle cx="20" cy="15" r="4.5"/></g><g fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.4" stroke-linecap="round"><path d="M13 22Q4 16 3 8M12 26Q2 26 1 34M13 30Q6 36 6 40M14 18Q8 13 9 8"/><path d="M27 22Q36 16 37 8M28 26Q38 26 39 34M27 30Q34 36 34 40M26 18Q32 13 31 8"/></g><circle cx="18" cy="14.5" r="1.3" fill="#ff9a3c"/><circle cx="22" cy="14.5" r="1.3" fill="#ff9a3c"/></svg>
+
+<main>
+  <div class="kicker">🦇 приглашение 🦇</div>
+  <h1>Вечеринка<br>на Хэллоуин</h1>
+  <p class="sub">Друзья, зову вас отпраздновать Хэллоуин вместе! Будет уютно, чуть жутковато и очень весело</p>
+
+  <div class="card when">
+    <div><span>30 октября</span><small>дата</small></div>
+    <div><span>18:00</span><small>начало</small></div>
+    <div><span>у меня дома</span><small>место</small></div>
+  </div>
+  <div class="card"><b>🎭 Костюм обязателен!</b><br>Страшным быть необязательно: можно стать кем угодно — вампиром-аристократом, лесным духом, космонавтом, динозавром, пчёлкой или героем любимого фильма. Но прийти нужно именно в костюме, без него никак.</div>
+  <div class="card"><b>🍪 Угощения</b><br>Можно принести что-нибудь поесть или выпить — по желанию.</div>
+  <div class="card"><b>🏆 Конкурс костюмов</b><br>Как в прошлом году: скидываемся в призовой банк (по 200 ₽), голосуем за лучший костюм, и победитель забирает весь банк.</div>
+
+  <section class="rsvp">
+    <h2>Придёшь?</h2>
+    <input id="name" type="text" placeholder="Как тебя зовут?" maxlength="40" autocomplete="off">
+    <div class="btns">
+      <button id="yes">Я приду 🎃</button>
+      <button id="no">Не приду</button>
+    </div>
+    <div id="hint"></div>
+    <div id="done"></div>
+    <div id="fallback"><button id="share">Отправить ответ</button></div>
+  </section>
+</main>
+
+<div class="pumpkins">
+  <svg class="pk" viewBox="0 0 100 90"><ellipse cx="32" cy="55" rx="28" ry="32" fill="#e8741a"/><ellipse cx="68" cy="55" rx="28" ry="32" fill="#e8741a"/><ellipse cx="50" cy="55" rx="22" ry="34" fill="#ff9a3c"/><rect x="46" y="12" width="8" height="14" rx="3" fill="#3d5a2a"/><path d="M33 48l8 10h-16zM67 48l8 10h-16zM32 72q18 14 36 0q-18 6-36 0z" fill="#3a1500"/></svg>
+  <svg class="pk" viewBox="0 0 100 90"><ellipse cx="32" cy="55" rx="28" ry="32" fill="#e8741a"/><ellipse cx="68" cy="55" rx="28" ry="32" fill="#e8741a"/><ellipse cx="50" cy="55" rx="22" ry="34" fill="#ff9a3c"/><rect x="46" y="12" width="8" height="14" rx="3" fill="#3d5a2a"/><circle cx="36" cy="52" r="7" fill="#3a1500"/><circle cx="64" cy="52" r="7" fill="#3a1500"/><path d="M32 70q18 16 36 0" stroke="#3a1500" stroke-width="6" fill="none" stroke-linecap="round"/></svg>
+</div>
+
+<script>
+const BAT='<svg viewBox="0 0 64 32"><path d="M32 7c-2 0-3 3-5 4-3-4-10-6-17-4 4 2 5 6 4 9 3-1 6 0 8 3 2-3 5-4 7-2l3 3 3-3c2-2 5-1 7 2 2-3 5-4 8-3-1-3 0-7 4-9-7-2-14 0-17 4-2-1-3-4-5-4z"/></svg>';
+const body=document.body;
+// stars
+const st=document.getElementById('stars');
+for(let i=0;i<40;i++){const s=document.createElement('i');s.className='star';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*70+'%';s.style.animationDelay=Math.random()*3+'s';st.appendChild(s)}
+// bats fly in
+for(let i=0;i<8;i++){const d=document.createElement('div');d.innerHTML=BAT;const b=d.firstChild;b.classList.add('bat');b.style.setProperty('--d',(i*.35)+'s');b.style.setProperty('--x',(-40+Math.random()*innerWidth*.6)+'px');b.style.setProperty('--dist',(innerHeight+140)+'px');b.style.setProperty('--s',(.6+Math.random()*.7).toFixed(2));body.appendChild(b)}
+// two idle bats afterwards
+setTimeout(()=>{[['70px','16%'],['150px','62%']].forEach(([t,l])=>{const d=document.createElement('div');d.innerHTML=BAT;const b=d.firstChild;b.classList.add('bat','idle');b.style.top=t;b.style.left=l;b.style.width='30px';body.appendChild(b)})},8500);
+
+// runaway button
+const no=document.getElementById('no'),hint=document.getElementById('hint');
+const quips=['Не-а 🦇','Мимо!','Слишком медленно','У тебя нет вариантов 🎃','Кнопка боится щекотки','Ловить бесполезно','Тыква осуждает','Ты же знаешь, что придёшь','Кнопка уехала в отпуск','Даже летучие мыши так не бегают','Твой костюм уже ждёт','Эта кнопка сломана, честно','Паук следит за тобой 🕷️','Попробуй ещё, я не против'];
+let dodges=0,last=0;
+function run(e){
+  if(e&&e.cancelable)e.preventDefault();
+  const now=Date.now();if(now-last<300)return;last=now;
+  if(!no.classList.contains('run')){const r=no.getBoundingClientRect();no.classList.add('run');no.style.left=r.left+'px';no.style.top=r.top+'px'}
+  const w=no.offsetWidth,h=no.offsetHeight,pad=12;
+  const x=pad+Math.random()*(innerWidth-w-2*pad),y=80+Math.random()*(innerHeight-h-160);
+  no.style.left=x+'px';no.style.top=y+'px';
+  hint.textContent=quips[dodges%quips.length];dodges++;
+  yes.style.transform='scale('+Math.min(1+dodges*.04,1.35)+')';
+  if(dodges===4)no.textContent='Не приду…';
+  if(dodges===8)no.textContent='Точно не приду';
+  if(dodges===12)no.textContent='Может, всё-таки приду?';
+}
+['pointerenter','pointerdown','touchstart','mousedown','click','focus'].forEach(t=>no.addEventListener(t,run,{passive:false}));
+document.addEventListener('pointermove',e=>{
+  const r=no.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2;
+  if(Math.hypot(e.clientX-cx,e.clientY-cy)<80)run();
+});
+
+// RSVP
+const yes=document.getElementById('yes'),nameEl=document.getElementById('name'),done=document.getElementById('done'),fb=document.getElementById('fallback');
+let msg='';
+async function save(name){
+  try{
+    const user=await claude.use('user'),db=await claude.use('db');
+    if(!db)return false;
+    let id=null;try{id=await user.id()}catch(e){}
+    id=id||('g'+Math.random().toString(36).slice(2,10));
+    await db.collection('rsvp').doc(id).set({name,status:'yes',at:new Date().toISOString()});
+    return true;
+  }catch(e){return false}
+}
+yes.addEventListener('click',async()=>{
+  const name=nameEl.value.trim();
+  if(!name){hint.textContent='Сначала напиши, как тебя зовут 🙂';nameEl.focus();return}
+  yes.disabled=true;
+  msg='Я приду на Хэллоуин 30 октября! Это '+name+' 🎃';
+  const ok=await save(name);
+  document.querySelector('.btns').style.display='none';nameEl.style.display='none';hint.textContent='';
+  done.style.display='block';
+  done.innerHTML='Ура, '+name.replace(/[<>&]/g,'')+'! Ждём тебя в костюме 🎃🦇';
+  if(!ok)fb.style.display='block';
+});
+document.getElementById('share').addEventListener('click',async()=>{
+  try{if(navigator.share){await navigator.share({text:msg});return}}catch(e){}
+  try{await navigator.clipboard.writeText(msg);document.getElementById('share').textContent='Скопировано, отправь в чат'}catch(e){}
+});
+</script>
+</body>
+</html>
