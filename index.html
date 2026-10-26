@@ -85,7 +85,7 @@ button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px 20p
     </div>
     <div id="hint"></div>
     <div id="done"></div>
-    <div id="fallback"><button id="share">Отправить ответ</button></div>
+    
   </section>
 </main>
 
@@ -129,32 +129,32 @@ document.addEventListener('pointermove',e=>{
 });
 
 // RSVP
-const yes=document.getElementById('yes'),nameEl=document.getElementById('name'),done=document.getElementById('done'),fb=document.getElementById('fallback');
-let msg='';
-async function save(name){
-  try{
-    const user=await claude.use('user'),db=await claude.use('db');
-    if(!db)return false;
-    let id=null;try{id=await user.id()}catch(e){}
-    id=id||('g'+Math.random().toString(36).slice(2,10));
-    await db.collection('rsvp').doc(id).set({name,status:'yes',at:new Date().toISOString()});
-    return true;
-  }catch(e){return false}
+const yes=document.getElementById('yes'),nameEl=document.getElementById('name'),done=document.getElementById('done'),btns=document.querySelector('.btns');
+function thanks(name){
+  btns.style.display='none';nameEl.style.display='none';hint.textContent='';
+  done.style.display='block';done.textContent='Ура, '+name+'! Ждём тебя в костюме 🎃🦇';
 }
-yes.addEventListener('click',async()=>{
+function showRetry(name,msg,err){
+  btns.style.display='none';nameEl.style.display='none';hint.textContent='';
+  done.style.display='block';done.textContent='';
+  const t=document.createElement('p');t.textContent='Осталось отправить ответ мне:';
+  const a=document.createElement('a');
+  a.href='https://t.me/share/url?url=%20&text='+encodeURIComponent(msg);a.target='_blank';a.rel='noopener';
+  a.textContent='Отправить в Telegram 📩';
+  a.style.cssText='display:inline-block;background:#ff9a3c;color:#2a1300;font-weight:700;text-decoration:none;padding:14px 20px;border-radius:14px;box-shadow:0 0 20px rgba(255,154,60,.5)';
+  const small=document.createElement('p');small.style.cssText='font-size:.8rem;color:var(--muted)';
+  small.textContent='Или отправь мне вручную: «'+msg+'»'+(err?' [код: '+err+']':'');
+  done.append(t,a,small);
+}
+yes.addEventListener('click',()=>{
   const name=nameEl.value.trim();
   if(!name){hint.textContent='Сначала напиши, как тебя зовут 🙂';nameEl.focus();return}
-  yes.disabled=true;
-  msg='Я приду на Хэллоуин 30 октября! Это '+name+' 🎃';
-  const ok=await save(name);
-  document.querySelector('.btns').style.display='none';nameEl.style.display='none';hint.textContent='';
-  done.style.display='block';
-  done.innerHTML='Ура, '+name.replace(/[<>&]/g,'')+'! Ждём тебя в костюме 🎃🦇';
-  if(!ok)fb.style.display='block';
-});
-document.getElementById('share').addEventListener('click',async()=>{
-  try{if(navigator.share){await navigator.share({text:msg});return}}catch(e){}
-  try{await navigator.clipboard.writeText(msg);document.getElementById('share').textContent='Скопировано, отправь в чат'}catch(e){}
+  const msg='Я приду на Хэллоуин 30 октября! Это '+name+' 🎃';
+  if(!navigator.share){showRetry(name,msg,'share недоступен');return}
+  navigator.share({text:msg}).then(()=>thanks(name)).catch(e=>{
+    if(e&&e.name==='AbortError'){hint.textContent='Чтобы я узнала, что ты придёшь, отправь сообщение мне 🙂'}
+    else{showRetry(name,msg,(e&&e.name)+': '+(e&&e.message))}
+  });
 });
 </script>
 </body>
